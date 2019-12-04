@@ -21,7 +21,7 @@ export class ConsulService {
     this.serviceName = config.get('service.name');
     this.servicePort = parseInt(config.get('service.port'), 10);
     this.serviceAddress = config.get('service.address', getIPAddress());
-    this.serviceId = MD5(`${this.serviceName}:${this.servicePort}`).toString();
+    this.serviceId = MD5(`${this.serviceName}:${this.serviceAddress}:${this.servicePort}`).toString();
     this.serviceTags = config.get('service.tags', ['user']);
 
     this.checkInterval = config.get('consul.check.interval', '10s');
@@ -32,6 +32,9 @@ export class ConsulService {
     this.checkRetryInterval = config.get('consul.check.retryInterval', '5s');
   }
 
+  /**
+   * 生成配置信息
+   */
   private generateRegisterOption() {
     const checkRouterPath = `${this.checkProtocol}://${this.serviceAddress}:${this.servicePort}${this.checkRouter}`;
     const check = {
