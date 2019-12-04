@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from './modules/config/config.module';
@@ -10,7 +11,7 @@ import { ServiceModule } from './modules/service/service.module';
   imports: [
     ConfigModule.forRoot(join(__dirname, '..', 'config.yml')),
     ConsulModule.forRoot(),
-    ServiceModule.forRoot(),
+    ServiceModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,9 +8,14 @@ import {
 } from 'src/core/constants';
 import { Consul } from 'consul';
 import { ConsulService } from './services/consul.service';
+import { TerminusModule } from '@nestjs/terminus';
 
 @Global()
-@Module({})
+@Module({
+  imports:[ TerminusModule.forRootAsync({
+    useFactory: () => ({ endpoints: [{ url: '/health', healthIndicators: [] }] }),
+})]
+})
 export class ServiceModule {
   public static forRoot(): DynamicModule {
     const serviceProvider = {

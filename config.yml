@@ -1,7 +1,16 @@
 service:
   name: service-template
   port: 3000
-  tags: ['template']
+  tags: [template]
 consul:
   host: 106.12.173.182
   port: 8500
+  health: 
+    protocol: http
+    route: /health
+    interval: 30s
+    timeout: 3s
+    maxRetry: 5
+    retryInterval: 5s
+
+
