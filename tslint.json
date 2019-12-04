@@ -1,0 +1,32 @@
+{
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+      "*.js",
+      "*.json",
+      "**/*.json",
+      "**/*.spec.ts",
+      "node_modules/**/*"
+    ]
+  },
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-standard",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "no-return-await": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "any",
+        "named-imports-order": "any"
+      }
+    ],
+    "no-console": true,
+    "semicolon": [true, "never"],
+    "no-floating-promises": false,
+    "max-classes-per-file": false
+  }
+}
