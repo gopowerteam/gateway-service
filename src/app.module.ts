@@ -1,11 +1,10 @@
-import { Module } from '@nestjs/common';
-import { TerminusModule } from '@nestjs/terminus';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConfigModule } from './modules/config/config.module';
-import { join } from 'path';
-import { ConsulModule } from './modules/consul/consul.module';
-import { ServiceModule } from './modules/service/service.module';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { ConfigModule } from './modules/config/config.module'
+import { join } from 'path'
+import { ConsulModule } from './modules/consul/consul.module'
+import { ServiceModule } from './modules/service/service.module'
 
 @Module({
   imports: [
@@ -14,6 +13,6 @@ import { ServiceModule } from './modules/service/service.module';
     ServiceModule.forRoot()
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}
