@@ -1,0 +1,7 @@
+service:
+  name: service-template
+  port: 3000
+  tags: ['template']
+consul:
+  host: 106.12.173.182
+  port: 8500
