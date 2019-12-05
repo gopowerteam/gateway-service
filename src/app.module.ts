@@ -1,19 +1,15 @@
 import { Module } from '@nestjs/common'
-
 import { ConfigModule } from './modules/config/config.module'
 import { join } from 'path'
 import { ConsulModule } from './modules/consul/consul.module'
-import { ServiceModule } from './modules/service/service.module'
 import { ProxyService } from './services/proxy.service'
 import { GatewayController } from './controllers/gateway.controller'
-import { APP_SERVICE_PROVIDER } from './core/constants'
 import { GatewayService } from './services/gateway.service'
 
 @Module({
   imports: [
     ConfigModule.forRoot(join(__dirname, '..', 'config.yml')),
-    ConsulModule.forRoot(),
-    ServiceModule.forRoot()
+    ConsulModule.forRoot()
   ],
   controllers: [GatewayController],
   providers: [GatewayService, ProxyService]

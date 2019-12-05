@@ -1,4 +1,3 @@
-import { ConsulService } from 'src/modules/service/services/consul.service'
 import * as HttpProxy from 'http-proxy'
 import { Request, Response } from 'express'
 import * as http from 'http'

@@ -1,17 +1,22 @@
-import { ConsulService } from 'src/modules/service/services/consul.service'
 import { Inject } from '@nestjs/common'
-import { APP_SERVICE_PROVIDER } from 'src/core/constants'
 import { Consul, Thenable } from 'consul'
+import { APP_CONSUL_PROVIDER } from 'src/core/constants'
+import { ConsulService } from 'src/modules/consul/services/consul.service'
 
 export class GatewayService {
   private readonly consul: Consul
   private services: { [id: string]: any } = {}
 
   constructor(
-    @Inject(APP_SERVICE_PROVIDER) private consulService: ConsulService
+    @Inject(APP_CONSUL_PROVIDER) private consulService: ConsulService
   ) {
     this.consul = this.consulService.consul
     this.updateServices()
+    var watch = this.consul.watch({
+      method: this.consul.agent.services,
+      options: { key: 'test' },
+      backoffFactor: 1000
+    })
   }
 
   /**

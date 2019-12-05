@@ -1,9 +1,7 @@
-import { NestFactory, NestApplication } from '@nestjs/core'
+import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { Application } from './core/application'
-import { ConfigModule } from './modules/config/config.module'
-import { APP_CONFIG_PROVIDER, APP_CONSUL_PROVIDER } from './core/constants'
-import { ProxyService } from './services/proxy.service'
+import { APP_CONFIG_PROVIDER } from './core/constants'
 
 // https
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
