@@ -1,7 +1,7 @@
 service:
   name: base-service
   port: 3000
-  tags: [base]
+  tags: ['api']
 consul:
   host: 106.12.173.182
   port: 8500

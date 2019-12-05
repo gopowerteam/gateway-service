@@ -2,6 +2,7 @@ import * as Consul from 'consul'
 import { ConfigService } from 'src/modules/config/services/config.service'
 import { getIPAddress } from 'src/common/utils/os.util'
 import { MD5 } from 'crypto-js'
+import { getCurrentEnv } from 'src/common/utils'
 
 export class ConsulService {
   public readonly consul: Consul.Consul
@@ -31,7 +32,9 @@ export class ConsulService {
     this.serviceId = MD5(
       `${this.serviceName}@${this.serviceAddress}:${this.servicePort}`
     ).toString()
-    this.serviceTags = config.get('service.tags', ['user'])
+    this.serviceTags = config
+      .get('service.tags', ['api'])
+      .concat([getCurrentEnv()])
     // 加载check配置
     this.checkInterval = config.get('consul.check.interval', '10s')
     this.checkProtocol = config.get('consul.check.protocol', 'http')
