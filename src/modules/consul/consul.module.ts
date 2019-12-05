@@ -1,31 +1,42 @@
-import { Module, Inject, DynamicModule, Global } from '@nestjs/common';
-import { ConfigModule } from '../config/config.module';
-import { ConfigService } from '../config/services/config.service';
-import { APP_CONSUL_PROVIDER, APP_CONFIG_PROVIDER } from 'src/core/constants';
-import * as Consul from 'consul';
-
+import { Module, Inject, DynamicModule, Global } from '@nestjs/common'
+import { ConfigModule } from '../config/config.module'
+import { ConfigService } from '../config/services/config.service'
+import { APP_CONSUL_PROVIDER, APP_CONFIG_PROVIDER } from 'src/core/constants'
+import { TerminusModule } from '@nestjs/terminus'
+import { ConsulService } from './services/consul.service'
 @Global()
-@Module({})
+@Module({
+  imports: [
+    // 健康检查
+    TerminusModule.forRootAsync({
+      useFactory: (config: ConfigService) => ({
+        endpoints: [
+          {
+            url: config.get('consul.check.router', '/health'),
+            healthIndicators: []
+          }
+        ]
+      }),
+      inject: [APP_CONFIG_PROVIDER]
+    })
+  ]
+})
 export class ConsulModule {
   public static forRoot(): DynamicModule {
     const consulProvider = {
       provide: APP_CONSUL_PROVIDER,
-      useFactory: async (config: ConfigService): Promise<Consul.Consul> => {
-        const consulConfig = config.get('consul');
-
-        const option = { host: consulConfig.host, port: consulConfig.port };
-
-        return new Consul({
-          ...option,
-          promisify: true,
-        });
+      useFactory: async (config: ConfigService): Promise<ConsulService> => {
+        // 创建consulService
+        const consulService = new ConsulService(config)
+        await consulService.register()
+        return consulService
       },
-      inject: [APP_CONFIG_PROVIDER],
-    };
+      inject: [APP_CONFIG_PROVIDER]
+    }
     return {
       module: ConsulModule,
       providers: [consulProvider],
-      exports: [consulProvider],
-    };
+      exports: [consulProvider]
+    }
   }
 }
