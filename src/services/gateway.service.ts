@@ -57,7 +57,6 @@ export class GatewayService {
       Object.values(services)
         .filter(services => findServiceByTag(services))
         .map(({ id }) => {
-          console.log(id)
           this.consul.agent.service.deregister(id)
         })
     )
@@ -103,7 +102,7 @@ export class GatewayService {
 
     // 通过Name查找Service
     const findServiceByName = service =>
-      isNullOrUndefined(service) || service.Service === serviceName
+      isNullOrUndefined(serviceName) || service.Service === serviceName
 
     return Object.values(this.services).find(
       service => findServiceByTag(service) && findServiceByName(service)
@@ -125,7 +124,7 @@ export class GatewayService {
    */
   public findDefaultService() {
     return this.findService({
-      serviceTags: ['default']
+      serviceTags: ['default', 'web']
     })
   }
 }
