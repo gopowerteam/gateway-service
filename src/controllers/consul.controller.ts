@@ -20,6 +20,6 @@ export class ConsulController {
   @Get('clear')
   async clearServiceList() {
     await this.gatewayService.clearServiceList()
-    return '重置成功'
+    return '清理成功'
   }
 }

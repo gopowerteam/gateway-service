@@ -12,12 +12,19 @@ export class GatewayService {
     @Inject(APP_CONSUL_PROVIDER) private consulService: ConsulService
   ) {
     this.consul = this.consulService.consul
-    this.updateServices()
-    // var watch = this.consul.watch({
-    //   method: this.consul.agent.services,
-    //   options: { key: 'test' },
-    //   backoffFactor: 1000
-    // })
+    this.createConsulWatch()
+  }
+
+  /**
+   * 创建Consul服务监听
+   */
+  private createConsulWatch() {
+    const watch = this.consul.watch({
+      method: this.consul.catalog.services
+    })
+
+    // 更新服务节点
+    watch.on('change', () => this.updateServices())
   }
 
   /**
@@ -44,12 +51,15 @@ export class GatewayService {
     const serviceTags = ['api', 'default']
     // 通过Tag查找Service
     const findServiceByTag = service =>
-      serviceTags.every(tag => service.tags.includes(tag))
+      serviceTags.some(tag => service.tags.includes(tag))
     // 清理服务
     return Promise.all(
       Object.values(services)
         .filter(services => findServiceByTag(services))
-        .map(({ id }) => this.consul.agent.service.deregister(id))
+        .map(({ id }) => {
+          console.log(id)
+          this.consul.agent.service.deregister(id)
+        })
     )
   }
 
