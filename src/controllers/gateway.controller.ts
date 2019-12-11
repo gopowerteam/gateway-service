@@ -10,6 +10,12 @@ export class GatewayController {
     private readonly proxyService: ProxyService
   ) {}
 
+  /**
+   * api服务网关
+   * @param req 
+   * @param res 
+   * @param serviceName 
+   */
   @All('/api/:service')
   apiProxy(
     @Req() req: Request,
@@ -21,10 +27,36 @@ export class GatewayController {
     if (service) {
       this.proxyService.forward(req, res, service)
     } else {
-      res.end('SERVICE NOT FOUND')
+      res.end('API SERVICE NOT FOUND')
     }
   }
 
+  /**
+   * web服务网关
+   * @param req 
+   * @param res 
+   * @param serviceName 
+   */
+  @All('/web/:service')
+  webProxy(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('service') serviceName
+  ) {
+    const service = this.gatewayService.findWebService(serviceName)
+
+    if (service) {
+      this.proxyService.forward(req, res, service)
+    } else {
+      res.end('WEB SERVICE NOT FOUND')
+    }
+  }
+
+  /**
+   * 默认服务网关
+   * @param req 
+   * @param res 
+   */
   @All()
   doProxy(@Req() req: Request, @Res() res: Response) {
     const service = this.gatewayService.findDefaultService()
@@ -32,7 +64,7 @@ export class GatewayController {
     if (service) {
       this.proxyService.forward(req, res, service)
     } else {
-      res.end('SERVICE NOT FOUND')
+      res.end('DEFAULT SERVICE NOT FOUND')
     }
   }
 }

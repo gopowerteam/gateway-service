@@ -119,6 +119,17 @@ export class GatewayService {
     })
   }
 
+
+  /**
+   * 查询API服务信息
+   */
+  public findWebService(serviceName) {
+    return this.findService({
+      serviceName,
+      serviceTags: ['web']
+    })
+  }
+
   /**
    * 查询API服务信息
    */
